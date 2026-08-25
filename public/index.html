@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlexDeck Dashboard</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- CSS Style -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polygon points="5 3 19 12 5 21 5 3" fill="#e5a93b" stroke="#e5a93b"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Plex<span>Deck</span></h1>
+          <span class="version-tag">v1.0.0</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="overview" id="nav-btn-overview">
+          <svg viewBox="0 0 24 24" class="nav-icon"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+          Overview
+        </button>
+        <button class="nav-item" data-tab="sessions" id="nav-btn-sessions">
+          <svg viewBox="0 0 24 24" class="nav-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          Active Sessions
+          <span class="badge active-sessions-badge" id="active-sessions-count">0</span>
+        </button>
+        <button class="nav-item" data-tab="auditor" id="nav-btn-auditor">
+          <svg viewBox="0 0 24 24" class="nav-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          Media Auditor
+        </button>
+        <button class="nav-item" data-tab="logs" id="nav-btn-logs">
+          <svg viewBox="0 0 24 24" class="nav-icon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          Health & Logs
+        </button>
+        <button class="nav-item" data-tab="cleanup" id="nav-btn-cleanup">
+          <svg viewBox="0 0 24 24" class="nav-icon"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+          Cleanup Center
+          <span class="badge warning-badge" id="cleanup-proposals-count" style="display:none;">0</span>
+        </button>
+        <button class="nav-item" data-tab="settings" id="nav-btn-settings">
+          <svg viewBox="0 0 24 24" class="nav-icon"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+          Settings
+        </button>
+      </nav>
+
+      <div class="sidebar-status-card" id="sidebar-status-widget">
+        <div class="status-indicator-dot online" id="status-dot"></div>
+        <div class="status-indicator-details">
+          <span class="status-title" id="status-title-text">Plex Server</span>
+          <span class="status-desc" id="status-desc-text">Connecting...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Toast Notification -->
+      <div id="toast-notification" class="toast hidden">
+        <span id="toast-message">Configuration saved successfully!</span>
+      </div>
+
+      <!-- Tab Content: Overview -->
+      <section id="tab-overview" class="tab-pane active">
+        <header class="content-header">
+          <h2>Dashboard Overview</h2>
+          <p>Real-time analytics and server vitals</p>
+        </header>
+
+        <!-- Mock Alert Banner -->
+        <div id="simulation-banner" class="alert-banner hidden">
+          <div class="alert-icon">💡</div>
+          <div class="alert-body">
+            <strong>Running in Simulation Mode</strong> - Real Plex credentials not detected or server unreachable. Using high-fidelity mockup data to demonstrate features.
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Server Identity Card -->
+          <div class="card glass identity-card">
+            <div class="card-header">
+              <h3>Server Vitals</h3>
+              <span class="badge primary-badge" id="vital-server-name">Plex-Server</span>
+            </div>
+            <div class="card-body">
+              <div class="vital-item">
+                <span class="label">Operating System</span>
+                <span class="value" id="vital-os">-</span>
+              </div>
+              <div class="vital-item">
+                <span class="label">Plex Version</span>
+                <span class="value" id="vital-version">-</span>
+              </div>
+              <div class="vital-item">
+                <span class="label">Hardware Transcoding</span>
+                <span class="value success-text" id="vital-transcode">Supported</span>
+              </div>
+              <div class="vital-item">
+                <span class="label">Tuner Status</span>
+                <span class="value" id="vital-tuner">Idle</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Circular Health Gauge Card -->
+          <div class="card glass health-card">
+            <div class="card-header">
+              <h3>System Health</h3>
+            </div>
+            <div class="card-body health-layout">
+              <div class="health-gauge-container">
+                <svg viewBox="0 0 100 100" class="health-gauge">
+                  <circle cx="50" cy="50" r="45" class="gauge-bg" />
+                  <circle cx="50" cy="50" r="45" class="gauge-fill" id="health-gauge-fill" stroke-dasharray="283" stroke-dashoffset="0" />
+                </svg>
+                <div class="gauge-text">
+                  <span class="gauge-percent" id="health-score-percent">100%</span>
+                  <span class="gauge-label" id="health-score-status">Healthy</span>
+                </div>
+              </div>
+              <div class="health-summary">
+                <h4 id="health-summary-headline">All Systems Nominal</h4>
+                <p id="health-summary-text">No issues detected in recent server logs.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Media Stats Card -->
+          <div class="card glass stats-card">
+            <div class="card-header">
+              <h3>Library Overview</h3>
+            </div>
+            <div class="card-body stats-grid">
+              <div class="stat-box">
+                <span class="stat-num" id="stats-total-items">0</span>
+                <span class="stat-label">Total Items</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-num" id="stats-total-size">0 GB</span>
+                <span class="stat-label">Disk Storage</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-num" id="stats-libraries-count">0</span>
+                <span class="stat-label">Media Libraries</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-num" id="stats-duplicates-count">0</span>
+                <span class="stat-label">Duplicates Found</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Library Actions -->
+        <div class="card glass quick-actions-card">
+          <div class="card-header">
+            <h3>Library & Database Maintenance</h3>
+          </div>
+          <div class="card-body">
+            <p class="section-description">Trigger Plex server cleanup operations and metadata updates.</p>
+            <div class="action-buttons-group">
+              <div class="action-item">
+                <div class="action-info">
+                  <h4>Scan Library</h4>
+                  <p>Check for newly added files or updates in libraries.</p>
+                </div>
+                <div class="action-trigger">
+                  <select id="select-scan-library" class="select-dropdown">
+                    <option value="">Select Section...</option>
+                  </select>
+                  <button class="btn btn-primary" id="btn-scan-library">Scan Now</button>
+                </div>
+              </div>
+
+              <div class="action-item">
+                <div class="action-info">
+                  <h4>Empty Section Trash</h4>
+                  <p>Purge missing items from Plex database database records.</p>
+                </div>
+                <div class="action-trigger">
+                  <select id="select-trash-library" class="select-dropdown">
+                    <option value="">Select Section...</option>
+                  </select>
+                  <button class="btn btn-danger" id="btn-empty-trash">Empty Trash</button>
+                </div>
+              </div>
+
+              <div class="action-item">
+                <div class="action-info">
+                  <h4>Optimize Databases</h4>
+                  <p>Clean and index SQLite database files for speed optimization.</p>
+                </div>
+                <div class="action-trigger">
+                  <button class="btn btn-secondary" id="btn-optimize-db">Run Optimization</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab Content: Active Sessions -->
+      <section id="tab-sessions" class="tab-pane">
+        <header class="content-header">
+          <h2>Active Sessions</h2>
+          <p>Real-time playback streams on your server</p>
+        </header>
+
+        <div id="no-active-sessions" class="empty-state-card glass">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10" />
+            <polygon points="10 8 16 12 10 16 10 8" />
+          </svg>
+          <h3>No Active Streams</h3>
+          <p>Nobody is currently playing media from this server.</p>
+        </div>
+
+        <div class="sessions-container" id="sessions-list">
+          <!-- Active session cards injected here -->
+        </div>
+
+        <div class="card glass history-card-margin">
+          <div class="card-header">
+            <h3>Recent Playback History</h3>
+          </div>
+          <div class="card-body table-responsive">
+            <table class="data-table" id="history-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Title</th>
+                  <th>Format</th>
+                  <th>Played At</th>
+                </tr>
+              </thead>
+              <tbody id="history-tbody">
+                <tr>
+                  <td colspan="4" class="text-center">Loading watch history...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab Content: Media Auditor -->
+      <section id="tab-auditor" class="tab-pane">
+        <header class="content-header">
+          <h2>Media Metadata Auditor</h2>
+          <p>Locate low quality files, missing subtitles, and metadata anomalies</p>
+        </header>
+
+        <div class="auditor-summary-grid">
+          <div class="auditor-stat-card glass" data-audit-section="duplicates">
+            <span class="auditor-stat-title">Duplicate Items</span>
+            <span class="auditor-stat-number" id="audit-count-duplicates">0</span>
+            <span class="auditor-stat-desc">Titles with multiple files</span>
+          </div>
+          <div class="auditor-stat-card glass" data-audit-section="posters">
+            <span class="auditor-stat-title">Missing Posters</span>
+            <span class="auditor-stat-number" id="audit-count-posters">0</span>
+            <span class="auditor-stat-desc">Fails visual appeal standards</span>
+          </div>
+          <div class="auditor-stat-card glass" data-audit-section="summaries">
+            <span class="auditor-stat-title">Missing Summaries</span>
+            <span class="auditor-stat-number" id="audit-count-summaries">0</span>
+            <span class="auditor-stat-desc">Items lacking details</span>
+          </div>
+          <div class="auditor-stat-card glass" data-audit-section="subtitles">
+            <span class="auditor-stat-title">Missing Subtitles</span>
+            <span class="auditor-stat-number" id="audit-count-subtitles">0</span>
+            <span class="auditor-stat-desc">No built-in subtitle streams</span>
+          </div>
+          <div class="auditor-stat-card glass" data-audit-section="unmatched">
+            <span class="auditor-stat-title">Unmatched Titles</span>
+            <span class="auditor-stat-number" id="audit-count-unmatched">0</span>
+            <span class="auditor-stat-desc">Not matched to online databases</span>
+          </div>
+        </div>
+
+        <div class="auditor-grid">
+          <!-- Resolution Breakdown SVG Graph -->
+          <div class="card glass resolution-card">
+            <div class="card-header">
+              <h3>Resolution Breakdown</h3>
+            </div>
+            <div class="card-body res-breakdown-body">
+              <div class="resolution-chart-container">
+                <div class="bar-container" data-res-key="4k">
+                  <span class="bar-label">4K Ultra HD</span>
+                  <div class="bar-track">
+                    <div class="bar-fill res-4k" id="res-bar-4k" style="width: 0%"></div>
+                  </div>
+                  <span class="bar-val" id="res-val-4k">0</span>
+                </div>
+                <div class="bar-container" data-res-key="1080p">
+                  <span class="bar-label">1080p Full HD</span>
+                  <div class="bar-track">
+                    <div class="bar-fill res-1080" id="res-bar-1080" style="width: 0%"></div>
+                  </div>
+                  <span class="bar-val" id="res-val-1080">0</span>
+                </div>
+                <div class="bar-container" data-res-key="720p">
+                  <span class="bar-label">720p HD</span>
+                  <div class="bar-track">
+                    <div class="bar-fill res-720" id="res-bar-720" style="width: 0%"></div>
+                  </div>
+                  <span class="bar-val" id="res-val-720">0</span>
+                </div>
+                <div class="bar-container" data-res-key="sd">
+                  <span class="bar-label">SD Standard</span>
+                  <div class="bar-track">
+                    <div class="bar-fill res-sd" id="res-bar-sd" style="width: 0%"></div>
+                  </div>
+                  <span class="bar-val" id="res-val-sd">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audit Details Section -->
+        <div class="card glass audit-details-card">
+          <div class="card-header border-bottom">
+            <h3 id="audit-details-title">Auditor Audit: Duplicates</h3>
+            <div class="audit-selector-buttons">
+              <button class="btn btn-tab active" data-audit-target="duplicates">Duplicates</button>
+              <button class="btn btn-tab" data-audit-target="posters">No Poster</button>
+              <button class="btn btn-tab" data-audit-target="summaries">No Summary</button>
+              <button class="btn btn-tab" data-audit-target="subtitles">No Subtitles</button>
+              <button class="btn btn-tab" data-audit-target="unmatched">Unmatched</button>
+            </div>
+          </div>
+          <div class="card-body table-responsive">
+            <!-- Table for duplicates -->
+            <table class="data-table audit-table-pane active" id="audit-table-duplicates">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Library</th>
+                  <th>Files Detected</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="audit-tbody-duplicates">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+
+            <!-- Table for missing posters -->
+            <table class="data-table audit-table-pane" id="audit-table-posters">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Library</th>
+                  <th>Metadata Link</th>
+                </tr>
+              </thead>
+              <tbody id="audit-tbody-posters">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+
+            <!-- Table for missing summaries -->
+            <table class="data-table audit-table-pane" id="audit-table-summaries">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Library</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="audit-tbody-summaries">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+
+            <!-- Table for missing subtitles -->
+            <table class="data-table audit-table-pane" id="audit-table-subtitles">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Library</th>
+                  <th>File Path</th>
+                </tr>
+              </thead>
+              <tbody id="audit-tbody-subtitles">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+
+            <!-- Table for unmatched titles -->
+            <table class="data-table audit-table-pane" id="audit-table-unmatched">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Library</th>
+                  <th>Current GUID</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="audit-tbody-unmatched">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+
+            <!-- Table for resolution items -->
+            <table class="data-table audit-table-pane" id="audit-table-resolution">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Library</th>
+                  <th>Resolution</th>
+                </tr>
+              </thead>
+              <tbody id="audit-tbody-resolution">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab Content: Health & Logs -->
+      <section id="tab-logs" class="tab-pane">
+        <header class="content-header">
+          <h2>Predictive Maintenance & System Logs</h2>
+          <p>Scan system events to anticipate transcoding errors or stuttering issues</p>
+        </header>
+
+        <div class="logs-grid">
+          <!-- Predictive Alert Box -->
+          <div class="card glass predict-alert-card">
+            <div class="card-header">
+              <h3>Maintenance Forecaster</h3>
+            </div>
+            <div class="card-body">
+              <div class="trend-alert-box warning" id="trend-box">
+                <div class="trend-icon" id="trend-icon">⚠️</div>
+                <div class="trend-details">
+                  <h4 id="trend-status-title">Warning Trend Detected</h4>
+                  <p id="trend-status-desc">Multiple slow queries and transcoding failures found in log files. Video streams may experience buffering.</p>
+                </div>
+              </div>
+              
+              <div class="troubleshooting-guide">
+                <h4>Recommended Maintenance Actions:</h4>
+                <ul class="guide-list" id="recommendations-list">
+                  <li>Optimize SQLite Database (Run Database Optimization in Overview)</li>
+                  <li>Confirm Hardware QSV Transcoding Drivers are up to date</li>
+                  <li>Clear temp transcoding cache directory folder to save space</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Log counts widget -->
+          <div class="card glass log-counts-card">
+            <div class="card-header">
+              <h3>Event Counts (Last 200 Logs)</h3>
+            </div>
+            <div class="card-body event-stats-flex">
+              <div class="event-stat red">
+                <span class="num" id="log-count-errors">0</span>
+                <span class="lbl">Errors</span>
+              </div>
+              <div class="event-stat orange">
+                <span class="num" id="log-count-warnings">0</span>
+                <span class="lbl">Warnings</span>
+              </div>
+              <div class="event-stat yellow">
+                <span class="num" id="log-count-slow">0</span>
+                <span class="lbl">Slow Queries</span>
+              </div>
+              <div class="event-stat blue">
+                <span class="num" id="log-count-transcode">0</span>
+                <span class="lbl">Transcode Fails</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Log Console Card -->
+        <div class="card glass log-console-card">
+          <div class="card-header border-bottom">
+            <h3>Live Log Stream</h3>
+            <div class="console-controls">
+              <input type="text" placeholder="Search logs..." class="search-input" id="log-search-input">
+              <select id="log-filter-level" class="select-dropdown font-small">
+                <option value="ALL">All Levels</option>
+                <option value="INFO">Info</option>
+                <option value="WARNING">Warnings</option>
+                <option value="ERROR">Errors</option>
+              </select>
+            </div>
+          </div>
+          <div class="console-body" id="log-console-container">
+            <!-- Logs printed here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab Content: Cleanup Center -->
+      <section id="tab-cleanup" class="tab-pane">
+        <header class="content-header">
+          <h2>Automated Cleanup Center</h2>
+          <p>Audit Plex folders using agent-approved rules. Final delete/move actions require approval.</p>
+        </header>
+
+        <div class="cleanup-layout">
+          <!-- Active cleanup rules card -->
+          <div class="card glass rules-summary-card">
+            <div class="card-header">
+              <h3>Active Rules Summary</h3>
+            </div>
+            <div class="card-body rules-info-grid">
+              <div class="rule-indicator">
+                <span class="rule-icon checked" id="rule-icon-dup">✓</span>
+                <span class="rule-label">Duplicates Auto-Flagging</span>
+              </div>
+              <div class="rule-indicator">
+                <span class="rule-icon checked" id="rule-icon-res">✓</span>
+                <span class="rule-label">Prefer Higher Resolution</span>
+              </div>
+              <div class="rule-indicator">
+                <span class="rule-icon checked" id="rule-icon-bit">✓</span>
+                <span class="rule-label">Prefer Higher Bitrate</span>
+              </div>
+              <div class="rule-indicator">
+                <span class="rule-icon checked" id="rule-icon-low">✓</span>
+                <span class="rule-label">Flag Quality Threshold</span>
+              </div>
+              <div class="rule-settings-desc">
+                <span class="label">Low Resolution Threshold:</span>
+                <span class="value" id="rule-desc-res">720p or lower</span>
+              </div>
+              <div class="rule-settings-desc">
+                <span class="label">Low Bitrate Threshold:</span>
+                <span class="value" id="rule-desc-bit">1500 kbps</span>
+              </div>
+              <div class="rule-settings-desc">
+                <span class="label">Quarantine Target Folder:</span>
+                <span class="value font-code" id="rule-desc-dir">./quarantine</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proposals Actions List -->
+          <div class="card glass proposals-card">
+            <div class="card-header border-bottom flex-wrap-header">
+              <h3>Cleanup Proposals</h3>
+              <div class="proposal-filters">
+                <label>
+                  <input type="checkbox" id="filter-dup" checked> Duplicates
+                </label>
+                <label>
+                  <input type="checkbox" id="filter-low" checked> Low Quality
+                </label>
+              </div>
+              <span class="badge warning-badge" id="proposals-total-badge">0 Pending</span>
+            </div>
+            <div class="card-body table-responsive">
+              <table class="data-table" id="proposals-table">
+                <thead>
+                  <tr>
+                    <th>Title / Library</th>
+                    <th>Type</th>
+                    <th>Issue & Action Details</th>
+                    <th>File Details</th>
+                    <th>Approve Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="proposals-tbody">
+                  <tr>
+                    <td colspan="5" class="text-center">Analyzing media files and compiling proposals...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab Content: Settings -->
+      <section id="tab-settings" class="tab-pane">
+        <header class="content-header">
+          <h2>Server Settings</h2>
+          <p>Configure Plex connection parameters, logs, and cleanup rule sets</p>
+        </header>
+
+        <div class="settings-grid">
+          <div class="card glass flex-column-layout">
+            <div class="card-header">
+              <h3>Plex Server Connectivity</h3>
+            </div>
+            <div class="card-body settings-form">
+              <form id="settings-pms-form">
+                <div class="form-group">
+                  <label for="input-pms-url">Plex Server URL</label>
+                  <input type="text" id="input-pms-url" placeholder="http://localhost:32400" required>
+                  <small>The local or remote HTTP address of your PMS server.</small>
+                </div>
+                <div class="form-group">
+                  <label for="input-pms-token">X-Plex-Token</label>
+                  <input type="password" id="input-pms-token" placeholder="Enter Token..." required>
+                  <small>Authentication token key used to query your Plex API.</small>
+                </div>
+                <div class="form-group">
+                  <label for="input-log-path">Plex Log File Path</label>
+                  <input type="text" id="input-log-path" placeholder="/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Logs/Plex Media Server.log">
+                  <small>Absolute path of the log file for predictive maintenance inspections.</small>
+                </div>
+                <div class="form-checkbox-group">
+                  <input type="checkbox" id="check-mock-logs">
+                  <label for="check-mock-logs">Use Simulated Mode (Logs and PMS fallbacks)</label>
+                </div>
+                <button type="submit" class="btn btn-primary" id="btn-save-pms">Save Connectivity Settings</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card glass flex-column-layout">
+            <div class="card-header">
+              <h3>Cleanup Rules Configuration</h3>
+            </div>
+            <div class="card-body settings-form">
+              <form id="settings-rules-form">
+                <div class="form-checkbox-group">
+                  <input type="checkbox" id="check-rule-dup">
+                  <label for="check-rule-dup">Detect Duplicate Media Files</label>
+                </div>
+                <div class="form-checkbox-group">
+                  <input type="checkbox" id="check-rule-prefer-res">
+                  <label for="check-rule-prefer-res">Keep Highest Resolution Duplicate (Discard lower)</label>
+                </div>
+                <div class="form-checkbox-group">
+                  <input type="checkbox" id="check-rule-prefer-bit">
+                  <label for="check-rule-prefer-bit">Keep Highest Bitrate Duplicate (Discard lower)</label>
+                </div>
+                
+                <hr class="form-divider">
+                
+                <div class="form-group">
+                  <label for="select-low-quality-res">Low Quality Resolution Threshold</label>
+                  <select id="select-low-quality-res" class="select-dropdown">
+                    <option value="sd">SD or lower (480p/576p)</option>
+                    <option value="720p">720p or lower</option>
+                    <option value="1080p">1080p or lower</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="input-low-quality-bitrate">Low Quality Bitrate Threshold (kbps)</label>
+                  <input type="number" id="input-low-quality-bitrate" min="100" max="50000" step="100">
+                </div>
+                <div class="form-group">
+                  <label for="input-quarantine-dir">Quarantine Target Directory</label>
+                  <input type="text" id="input-quarantine-dir" placeholder="./quarantine" required>
+                  <small>Absolute or relative folder path where approved media files are moved.</small>
+                </div>
+                <button type="submit" class="btn btn-primary" id="btn-save-rules">Save Rules Settings</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Confirmation Dialog -->
+  <dialog class="modal-dialog glass" id="confirm-modal">
+    <div class="modal-content">
+      <h3 id="modal-title">Confirm Cleanup Action</h3>
+      <p id="modal-message">Are you sure you want to perform this operation?</p>
+      <div class="modal-details" id="modal-details-file">File: /some/path/to/media.mp4</div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-modal-cancel">Cancel</button>
+        <button class="btn btn-danger" id="btn-modal-confirm">Confirm Action</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Banish Stream Modal -->
+  <dialog class="modal-dialog glass" id="banish-modal">
+    <div class="modal-content">
+      <h3 id="banish-modal-title">Banish Playback Stream</h3>
+      <p>This will terminate the active session. Enter a reason to display on the user's player screen:</p>
+      <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+        <label for="banish-reason">Banishment Message / Reason</label>
+        <input type="text" id="banish-reason" placeholder="e.g., Please use Original/Maximum quality settings." style="width: 100%;" required>
+      </div>
+      <div class="modal-details" id="banish-modal-details">
+        User: alice<br>
+        Stream: Dune: Part Two
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-banish-cancel">Cancel</button>
+        <button class="btn btn-danger" id="btn-banish-confirm">Banish Stream</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Poster Uploader Modal -->
+  <dialog class="modal-dialog glass" id="poster-modal" style="max-width: 480px; width: 90%;">
+    <div class="modal-content">
+      <h3 id="poster-modal-title">Update Cover Poster</h3>
+      <p style="margin-bottom: 16px;">Set a cover poster by choosing a search match or pasting a custom URL.</p>
+      
+      <!-- Section 1: Auto Matches -->
+      <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+        <label>Plex Search Matches</label>
+        <div id="poster-matches-loading" style="color: var(--text-muted); font-size: 13px; font-style: italic; margin-bottom: 8px;">Searching Plex for matches...</div>
+        <div id="poster-matches-list" style="max-height: 120px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 8px; display: flex; flex-direction: column; gap: 6px; background-color: rgba(0,0,0,0.2);">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Section 1.5: Available Posters -->
+      <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+        <label>Available Official Posters</label>
+        <div id="poster-options-loading" style="color: var(--text-muted); font-size: 13px; font-style: italic; margin-bottom: 8px;">Loading available posters...</div>
+        <div id="poster-options-list" style="display: flex; gap: 10px; overflow-x: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px; background-color: rgba(0,0,0,0.2); min-height: 120px; scrollbar-width: thin; align-items: center; white-space: nowrap;">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Section 2: Custom URL (Fallback) -->
+      <div class="form-group" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+        <label for="poster-url">Or Paste Custom Image URL (Fallback)</label>
+        <input type="text" id="poster-url" placeholder="https://example.com/artwork.jpg" style="width: 100%;">
+      </div>
+
+      <!-- Preview Box -->
+      <div class="poster-preview-container" style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <div class="poster-preview-box" style="width: 120px; height: 180px; border: 1px dashed var(--border-color); border-radius: var(--radius-md); overflow: hidden; display: flex; align-items: center; justify-content: center; background-color: rgba(0,0,0,0.3);">
+          <img id="poster-preview-img" src="" alt="Poster Preview" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+          <span id="poster-preview-placeholder" style="color: var(--text-muted); font-size: 11px; text-align: center; padding: 12px;">No Preview Available</span>
+        </div>
+      </div>
+
+      <div class="modal-details" id="poster-modal-details" style="font-size: 12px; margin-bottom: 16px;">
+        Title: Dune: Part Two
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-poster-cancel">Cancel</button>
+        <button class="btn btn-primary" id="btn-poster-confirm">Update Poster</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- JavaScript logic -->
+  <script src="js/app.js" type="module"></script>
+</body>
+</html>

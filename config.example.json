@@ -1,0 +1,20 @@
+{
+  "cleanup": {
+    "targetDir": "./quarantine",
+    "rules": {
+      "deleteDuplicates": true,
+      "preferHigherResolution": true,
+      "preferHigherBitrate": true,
+      "maxLowQualityResolution": "720p",
+      "maxLowQualityBitrate": 1500
+    }
+  },
+  "predictiveMaintenance": {
+    "checkIntervalMinutes": 5,
+    "errorThresholdCount": 5
+  },
+  "pathMappings": {
+    "/movies": "/path/to/local/movies",
+    "/tv": "/path/to/local/tv"
+  }
+}
