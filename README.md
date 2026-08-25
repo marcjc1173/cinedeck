@@ -18,6 +18,9 @@ PlexDeck is a modern, responsive web dashboard and media auditor for Plex Media 
   <img src="screenshots/plexdeck5.png" width="48%" alt="Logs Console & Health Forecast" />
   <img src="screenshots/plexdeck6.png" width="48%" alt="Settings Dashboard" />
 </p>
+<p align="center">
+  <img src="screenshots/plexdeck7.png" width="70%" alt="Artwork Options Modal" />
+</p>
 
 ---
 
