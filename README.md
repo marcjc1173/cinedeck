@@ -1,4 +1,4 @@
-# PlexDeck 🎬
+# PlexDeck 📼
 
 PlexDeck is a lightweight, responsive self-hosted dashboard, stream controller, and library quality auditor for Plex Media Server. It features an interactive playback deck to monitor and terminate active streams (banish transcodes with custom user alerts), an automated media auditor to quarantine duplicate files, match unmatched listings, fix auto-generated cover stills using an alternate artwork selector, and a log analyzer that tracks server performance and forecasts bottlenecks.
 
