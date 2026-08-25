@@ -98,7 +98,7 @@ function getPlexUrl(config) {
 }
 
 function shouldMockPlex(config) {
-  return !config.plex.token || config.plex.token === 'YOUR_X_PLEX_TOKEN_HERE';
+  return config?.plex?.useMockLogs === true || !config?.plex?.token || config?.plex?.token === 'YOUR_X_PLEX_TOKEN_HERE';
 }
 
 // Helper to translate Plex container paths to local host filesystem paths
