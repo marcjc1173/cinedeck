@@ -4,6 +4,23 @@ PlexDeck is a modern, responsive web dashboard and media auditor for Plex Media 
 
 ---
 
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/plexdeck1.png" width="48%" alt="PlexDeck Overview" />
+  <img src="screenshots/plexdeck2.png" width="48%" alt="Active Sessions" />
+</p>
+<p align="center">
+  <img src="screenshots/plexdeck3.png" width="48%" alt="Media Auditor Overview" />
+  <img src="screenshots/plexdeck4.png" width="48%" alt="Auditor Item List" />
+</p>
+<p align="center">
+  <img src="screenshots/plexdeck5.png" width="48%" alt="Logs Console & Health Forecast" />
+  <img src="screenshots/plexdeck6.png" width="48%" alt="Settings Dashboard" />
+</p>
+
+---
+
 ## Key Features
 *   **Active Playback Stream Banishment:** Identify problematic streams (e.g. transcoding/low-quality) and terminate them instantly with a custom user-facing message.
 *   **Media Auditor & Cleanup:**
