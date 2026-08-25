@@ -44,7 +44,7 @@ PlexDeck is a modern, responsive web dashboard and media auditor for Plex Media 
 
 ### 2. Clone and Install Dependencies
 ```bash
-git clone https://github.com/yourusername/plexdeck.git
+git clone https://github.com/marcjc1173/plexdeck.git
 cd plexdeck
 npm install
 ```
