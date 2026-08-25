@@ -1,7 +1,7 @@
 {
-  "name": "plexdeck",
+  "name": "cinedeck",
   "version": "1.0.0",
-  "description": "PlexDeck Dashboard & Health Forecast",
+  "description": "CineDeck Dashboard & Health Forecast",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

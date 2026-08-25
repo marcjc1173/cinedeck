@@ -1,5 +1,5 @@
 [Unit]
-Description=PlexDeck Dashboard Service
+Description=CineDeck Dashboard Service
 After=network.target
 
 [Service]

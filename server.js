@@ -932,7 +932,7 @@ app.get('/api/plex/metadata/audit', async (req, res) => {
       });
 
       if (itemsToScan.length > 0) {
-        console.log(`PlexDeck: Scanning posters for ${itemsToScan.length} items (out of ${items.length}) in library "${lib.title}"...`);
+        console.log(`CineDeck: Scanning posters for ${itemsToScan.length} items (out of ${items.length}) in library "${lib.title}"...`);
         const batchSize = 15;
         for (let i = 0; i < itemsToScan.length; i += batchSize) {
           const batch = itemsToScan.slice(i, i + batchSize);
@@ -1338,5 +1338,5 @@ app.get('/api/events', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`PlexDeck Server running at http://localhost:${PORT}`);
+  console.log(`CineDeck Server running at http://localhost:${PORT}`);
 });

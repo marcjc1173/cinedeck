@@ -1,13 +1,13 @@
-# PlexDeck 📼
+# CineDeck 📼
 
-PlexDeck is a lightweight, responsive self-hosted dashboard, stream controller, and library quality auditor for Plex Media Server. It features an interactive playback deck to monitor and terminate active streams (banish transcodes with custom user alerts), an automated media auditor to quarantine duplicate files, match unmatched listings, fix auto-generated cover stills using an alternate artwork selector, and a log analyzer that tracks server performance and forecasts bottlenecks.
+CineDeck is a lightweight, responsive self-hosted dashboard, stream controller, and library quality auditor for Plex Media Server. It features an interactive playback deck to monitor and terminate active streams (banish transcodes with custom user alerts), an automated media auditor to quarantine duplicate files, match unmatched listings, fix auto-generated cover stills using an alternate artwork selector, and a log analyzer that tracks server performance and forecasts bottlenecks.
 
 ---
 
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/plexdeck1.png" width="48%" alt="PlexDeck Overview" />
+  <img src="screenshots/plexdeck1.png" width="48%" alt="CineDeck Overview" />
   <img src="screenshots/plexdeck2.png" width="48%" alt="Active Sessions" />
 </p>
 <p align="center">
@@ -44,8 +44,8 @@ PlexDeck is a lightweight, responsive self-hosted dashboard, stream controller, 
 
 ### 2. Clone and Install Dependencies
 ```bash
-git clone https://github.com/marcjc1173/plexdeck.git
-cd plexdeck
+git clone https://github.com/marcjc1173/cinedeck.git
+cd cinedeck
 npm install
 ```
 
@@ -56,7 +56,7 @@ cp .env.example .env
 ```
 Open `.env` and fill in your settings:
 ```env
-# PlexDeck web server port
+# CineDeck web server port
 PORT=3030
 
 # Plex Media Server connection details
@@ -89,15 +89,15 @@ Open your browser and navigate to: `http://localhost:3030`
 You can configure runtime settings via the **Settings** tab in the web dashboard interface. These settings are stored locally in a safe `config.json` file:
 
 ### Path Mappings (Docker or Remote setups)
-If Plex is running in a different container or machine (e.g. docker) and lists file paths differently than where the PlexDeck server is running, define mappings under the Settings panel:
+If Plex is running in a different container or machine (e.g. docker) and lists file paths differently than where the CineDeck server is running, define mappings under the Settings panel:
 *   **Plex Path:** Path reported by Plex (e.g. `/movies`).
-*   **Local Path:** Actual path accessible by the PlexDeck process (e.g. `/mnt/user/media/movies`).
+*   **Local Path:** Actual path accessible by the CineDeck process (e.g. `/mnt/user/media/movies`).
 
 #### Why is this needed?
-Plex reports the location of media files based on its own internal mount paths. When PlexDeck performs checks (such as finding duplicates, checking actual file sizes, or moving files into quarantine), it needs to access those media files directly from the host filesystem.
+Plex reports the location of media files based on its own internal mount paths. When CineDeck performs checks (such as finding duplicates, checking actual file sizes, or moving files into quarantine), it needs to access those media files directly from the host filesystem.
 
-*   **Same Host Setup:** If Plex and PlexDeck are running on the same host machine and see the exact same file paths, **you do not need path mappings**. You can leave this setting blank/empty.
-*   **Docker/Container Setup:** If Plex is running inside Docker with a mount like `/movies` mapped to `/mnt/user/movies` on the host, and PlexDeck runs directly on the host, Plex will tell PlexDeck the file is at `/movies/Avatar.mp4`. PlexDeck will not find this file on the host unless you define a mapping:
+*   **Same Host Setup:** If Plex and CineDeck are running on the same host machine and see the exact same file paths, **you do not need path mappings**. You can leave this setting blank/empty.
+*   **Docker/Container Setup:** If Plex is running inside Docker with a mount like `/movies` mapped to `/mnt/user/movies` on the host, and CineDeck runs directly on the host, Plex will tell CineDeck the file is at `/movies/Avatar.mp4`. CineDeck will not find this file on the host unless you define a mapping:
     *   **Plex Path:** `/movies`
     *   **Local Path:** `/mnt/user/movies`
     This translates `/movies/Avatar.mp4` to `/mnt/user/movies/Avatar.mp4` dynamically during execution.
@@ -106,31 +106,33 @@ Plex reports the location of media files based on its own internal mount paths. 
 
 ## Deploying as a Systemd Service (Linux)
 
-You can manage PlexDeck as a background service using systemd:
+You can manage CineDeck as a background service using systemd:
 
-1. Copy the `plexdeck.service` template file to your system services folder:
+1. Copy the `cinedeck.service` template file to your system services folder:
    ```bash
-   sudo cp plexdeck.service /etc/systemd/system/
+   sudo cp cinedeck.service /etc/systemd/system/
    ```
-2. Open `/etc/systemd/system/plexdeck.service` and verify that the `User`, `WorkingDirectory`, and `ExecStart` match your user account and installation paths:
+2. Open `/etc/systemd/system/cinedeck.service` and verify that the `User`, `WorkingDirectory`, and `ExecStart` match your user account and installation paths:
    ```ini
    User=yourusername
-   WorkingDirectory=/path/to/plexdeck
+   WorkingDirectory=/path/to/cinedeck
    ExecStart=/usr/bin/node server.js
    ```
 3. Reload systemd and enable/start the service:
    ```bash
    sudo systemctl daemon-reload
-   sudo systemctl enable plexdeck
-   sudo systemctl start plexdeck
+   sudo systemctl enable cinedeck
+   sudo systemctl start cinedeck
    ```
 4. Check the service status:
    ```bash
-   sudo systemctl status plexdeck
+   sudo systemctl status cinedeck
    ```
+
+---
 
 ## Support ☕
 
-If you find PlexDeck useful and want to support its development, feel free to buy me a coffee!
+If you find CineDeck useful and want to support its development, feel free to buy me a coffee!
 
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/marcjc1173)
