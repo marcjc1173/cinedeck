@@ -129,17 +129,6 @@ You can manage PlexDeck as a background service using systemd:
    sudo systemctl status plexdeck
    ```
 
----
-
-## Security & Publishing Checklist
-
-Before you push this repository to GitHub or make it public:
-*   Make sure `.env` is **NOT** committed. It contains your private Plex URL and Token.
-*   Make sure `config.json` and `bad_posters_cache.json` are **NOT** committed (they are ignored by default in our `.gitignore`).
-*   Always keep the `.env.example` file up to date with template placeholders.
-
----
-
 ## Support ☕
 
 If you find PlexDeck useful and want to support its development, feel free to buy me a coffee!
